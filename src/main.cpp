@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -13,6 +14,8 @@ private:
     bool disponivel;
 
 public:
+    Astronauta() {}
+    
     Astronauta(string cpf, string nome, int idade) {
         this->cpf = cpf;
         this->nome = nome;
@@ -26,6 +29,9 @@ public:
     int getIdade() const { return idade; }
     bool estaVivo() const { return vivo; }
     bool estaDisponivel() const { return disponivel; }
+
+    void setVivo(bool vivo) { this->vivo = vivo; }
+    void setDisponivel(bool disponivel) { this->disponivel = disponivel; }
 
     void embarcar() { disponivel = false; }
     void desembarcar() { if (vivo) disponivel = true; }
@@ -42,6 +48,8 @@ private:
     vector<string> cpfs;
 
 public:
+    Voo() {}
+    
     Voo(int codigo) {
         this->codigo = codigo;
         this->estado = "planejado";
@@ -52,6 +60,8 @@ public:
     int getQuantidadeAstronautas() const { return cpfs.size(); }
     
     string getCpf(int posicao) const { return cpfs[posicao]; }
+    
+    void setEstado(string estado) { this->estado = estado; }
 
     bool temAstronauta(string cpf) const {
         for (size_t i = 0; i < cpfs.size(); i++) {
@@ -281,7 +291,7 @@ public:
         for (size_t i = 0; i < astronautas.size(); i++) {
             if (!astronautas[i].estaVivo()) {
                 temMorto = true;
-                cout << astronautas[i].getCpf() << " " << astronautas[i].getNome() << " voos:";
+                cout << astronautas[i].getCpf() << " " << astronautas[i].getNome() << " - voos:";
                 bool participouAlgum = false;
                 for (size_t v = 0; v < voos.size(); v++) {
                     if (voos[v].getEstado() != "planejado" && voos[v].temAstronauta(astronautas[i].getCpf())) {
@@ -296,11 +306,10 @@ public:
             }
         }
         if (!temMorto) {
-            cout << "(nenhum)." << endl;
+            cout << "(nenhum)" << endl;
         }
     }
 
-    // Novidades da Missão 1
     void listarAstronautas() {
         cout << "LISTA DE ASTRONAUTAS" << endl;
         if (astronautas.empty()) {
@@ -337,6 +346,105 @@ public:
         if (!participou) {
             cout << "(nenhum voo)" << endl;
         }
+    }
+
+    void salvar(string nomeArquivo) {
+        ofstream arquivo(nomeArquivo);
+        if (!arquivo.is_open()) {
+            cout << "ERRO: nao foi possivel abrir o arquivo " << nomeArquivo << endl;
+            return;
+        }
+
+        arquivo << astronautas.size() << endl;
+        for (size_t i = 0; i < astronautas.size(); i++) {
+            arquivo << astronautas[i].getCpf() << " " 
+                    << astronautas[i].getIdade() << " " 
+                    << astronautas[i].estaVivo() << " " 
+                    << astronautas[i].estaDisponivel() << " " 
+                    << astronautas[i].getNome() << endl;
+        }
+
+        arquivo << voos.size() << endl;
+        for (size_t i = 0; i < voos.size(); i++) {
+            // Substitui espaços do estado por '_' para salvar em uma única palavra
+            string est = voos[i].getEstado();
+            for (size_t k = 0; k < est.length(); k++) {
+                if (est[k] == ' ') est[k] = '_';
+            }
+
+            arquivo << voos[i].getCodigo() << " " 
+                    << est << " " 
+                    << voos[i].getQuantidadeAstronautas();
+            for (int j = 0; j < voos[i].getQuantidadeAstronautas(); j++) {
+                arquivo << " " << voos[i].getCpf(j);
+            }
+            arquivo << endl;
+        }
+
+        arquivo.close();
+        cout << "OK: dados salvos em " << nomeArquivo << endl;
+    }
+
+    void carregar(string nomeArquivo) {
+        ifstream arquivo(nomeArquivo);
+        if (!arquivo.is_open()) {
+            cout << "ERRO: nao foi possivel carregar de " << nomeArquivo << endl;
+            return;
+        }
+
+        astronautas.clear();
+        voos.clear();
+
+        size_t qtdAst;
+        if (!(arquivo >> qtdAst)) {
+            arquivo.close();
+            return;
+        }
+
+        for (size_t i = 0; i < qtdAst; i++) {
+            string cpf, nome;
+            int idade;
+            bool vivo, disponivel;
+            
+            arquivo >> cpf >> idade >> vivo >> disponivel;
+            getline(arquivo >> ws, nome);
+
+            Astronauta ast(cpf, nome, idade);
+            ast.setVivo(vivo);
+            ast.setDisponivel(disponivel);
+            astronautas.push_back(ast);
+        }
+
+        size_t qtdVoos;
+        if (!(arquivo >> qtdVoos)) {
+            arquivo.close();
+            return;
+        }
+
+        for (size_t i = 0; i < qtdVoos; i++) {
+            int codigo;
+            string estado;
+            int qtdAstVoo;
+            
+            arquivo >> codigo >> estado >> qtdAstVoo;
+
+            // Restaura os espaços do estado trocando '_' de volta por espaço
+            for (size_t k = 0; k < estado.length(); k++) {
+                if (estado[k] == '_') estado[k] = ' ';
+            }
+
+            Voo v(codigo);
+            v.setEstado(estado);
+            for (int j = 0; j < qtdAstVoo; j++) {
+                string cpfAst;
+                arquivo >> cpfAst;
+                v.adicionarAstronauta(cpfAst);
+            }
+            voos.push_back(v);
+        }
+
+        arquivo.close();
+        cout << "OK: dados carregados de " << nomeArquivo << endl;
     }
 };
 
@@ -388,6 +496,14 @@ int main() {
             string cpf;
             cin >> cpf;
             agencia.historicoAstronauta(cpf);
+        } else if (comando == "SALVAR") {
+            string arquivo;
+            cin >> arquivo;
+            agencia.salvar(arquivo);
+        } else if (comando == "CARREGAR") {
+            string arquivo;
+            cin >> arquivo;
+            agencia.carregar(arquivo);
         } else if (comando == "FIM") {
             break;
         } else {
