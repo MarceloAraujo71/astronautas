@@ -1,0 +1,21 @@
+ERRO: comando desconhecido COMANDO_DESCONHECIDO
+OK: astronauta 111 cadastrado
+ERRO: voo 999 nao cadastrado
+ERRO: voo 999 nao cadastrado
+ERRO: voo 999 nao cadastrado
+ERRO: voo 999 nao cadastrado
+OK: voo 10 cadastrado
+ERRO: voo 10 nao possui astronautas
+ERRO: voo 10 nao esta em curso
+ERRO: voo 10 nao esta em curso
+LISTA DE VOOS
+== planejado ==
+Voo 10: sem astronautas
+== em curso ==
+(nenhum)
+== finalizado com sucesso ==
+(nenhum)
+== finalizado com explosao ==
+(nenhum)
+ASTRONAUTAS MORTOS
+(nenhum)

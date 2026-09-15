@@ -1,0 +1,18 @@
+OK: astronauta 111 cadastrado
+OK: astronauta 222 cadastrado
+OK: voo 10 cadastrado
+OK: astronauta 111 adicionado ao voo 10
+ERRO: astronauta 111 ja esta no voo 10
+ERRO: astronauta 999 nao cadastrado
+ERRO: astronauta 222 nao esta no voo 10
+OK: astronauta 111 removido do voo 10
+ERRO: astronauta 111 nao esta no voo 10
+LISTA DE VOOS
+== planejado ==
+Voo 10: sem astronautas
+== em curso ==
+(nenhum)
+== finalizado com sucesso ==
+(nenhum)
+== finalizado com explosao ==
+(nenhum)

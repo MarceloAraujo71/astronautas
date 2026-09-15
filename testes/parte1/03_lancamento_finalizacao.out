@@ -1,0 +1,23 @@
+OK: astronauta 111 cadastrado
+OK: astronauta 222 cadastrado
+OK: voo 10 cadastrado
+OK: voo 20 cadastrado
+OK: astronauta 111 adicionado ao voo 10
+OK: astronauta 111 adicionado ao voo 20
+OK: voo 10 lancado
+ERRO: astronauta 111 esta indisponivel
+OK: voo 10 finalizado com sucesso
+OK: voo 20 lancado
+OK: voo 20 finalizado com sucesso
+LISTA DE VOOS
+== planejado ==
+(nenhum)
+== em curso ==
+(nenhum)
+== finalizado com sucesso ==
+Voo 10: 111 Ana Maria
+Voo 20: 111 Ana Maria
+== finalizado com explosao ==
+(nenhum)
+ASTRONAUTAS MORTOS
+(nenhum)

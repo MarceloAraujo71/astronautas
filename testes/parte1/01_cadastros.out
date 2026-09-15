@@ -1,0 +1,18 @@
+OK: astronauta 111 cadastrado
+OK: astronauta 222 cadastrado
+ERRO: astronauta com CPF 111 ja cadastrado
+OK: voo 10 cadastrado
+OK: voo 20 cadastrado
+ERRO: voo 10 ja cadastrado
+LISTA DE VOOS
+== planejado ==
+Voo 10: sem astronautas
+Voo 20: sem astronautas
+== em curso ==
+(nenhum)
+== finalizado com sucesso ==
+(nenhum)
+== finalizado com explosao ==
+(nenhum)
+ASTRONAUTAS MORTOS
+(nenhum)
